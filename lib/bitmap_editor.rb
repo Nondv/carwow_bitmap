@@ -8,6 +8,7 @@ class BitmapEditor
 
   COMMAND_MAP = { 'I' => :init_bitmap,
                   'L' => :color_pixel,
+                  'V' => :color_vertical_line,
                   'S' => :print_bitmap }.freeze
 
   attr_reader :bitmap
@@ -45,6 +46,17 @@ class BitmapEditor
     color = args[2] || raise(BadArgumentsError)
 
     bitmap.draw_point(x, y, color)
+  rescue ArgumentError
+    raise BadArgumentsError
+  end
+
+  def color_vertical_line(args)
+    x = args[0]&.to_i || raise(BadArgumentsError)
+    y1 = args[1]&.to_i || raise(BadArgumentsError)
+    y2 = args[2]&.to_i || raise(BadArgumentsError)
+    color = args[3] || raise(BadArgumentsError)
+
+    bitmap.draw_rectangle(x, y1, x, y2, color)
   rescue ArgumentError
     raise BadArgumentsError
   end

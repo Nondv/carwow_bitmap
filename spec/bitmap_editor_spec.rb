@@ -45,5 +45,21 @@ RSpec.describe BitmapEditor do
       expect { editor.execute_command('L B 1 2') }.to raise_error(err)
       expect { editor.execute_command('L 1 y B') }.to raise_error(err)
     end
+
+    it 'executes V command as #color_vertical_line' do
+      editor.init_bitmap([10, 10])
+      editor.execute_command('V 4 2 8 A')
+      editor.execute_command('V 6 3 5 B')
+      (2..8).each { |y| expect(editor.bitmap[4, y]).to eq 'A' }
+      (3..5).each { |y| expect(editor.bitmap[6, y]).to eq 'B' }
+      expect(editor.bitmap[5, 2]).to eq 'O'
+      expect(editor.bitmap[4, 9]).to eq 'O'
+      expect(editor.bitmap[4, 1]).to eq 'O'
+
+      err = BitmapEditor::BadArgumentsError
+      expect { editor.execute_command('V 1 2 3') }.to raise_error(err)
+      expect { editor.execute_command('V B 1 2 3') }.to raise_error(err)
+      expect { editor.execute_command('V 1 y 2 B') }.to raise_error(err)
+    end
   end
 end
