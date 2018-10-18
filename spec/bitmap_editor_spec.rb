@@ -32,5 +32,18 @@ RSpec.describe BitmapEditor do
       expect { editor.execute_command('I') }.to raise_error(err)
       expect { editor.execute_command('I 5') }.to raise_error(err)
     end
+
+    it 'executes L command as #color_pixel' do
+      editor.init_bitmap([3, 3])
+      expect(editor.bitmap[1, 2]).to eq 'O'
+      editor.execute_command('L 1 2 B')
+      expect(editor.bitmap[1, 2]).to eq 'B'
+      expect(editor.bitmap[2, 2]).to eq 'O'
+
+      err = BitmapEditor::BadArgumentsError
+      expect { editor.execute_command('L 1 2') }.to raise_error(err)
+      expect { editor.execute_command('L B 1 2') }.to raise_error(err)
+      expect { editor.execute_command('L 1 y B') }.to raise_error(err)
+    end
   end
 end

@@ -7,6 +7,7 @@ class BitmapEditor
   class BadArgumentsError < StandardError; end
 
   COMMAND_MAP = { 'I' => :init_bitmap,
+                  'L' => :color_pixel,
                   'S' => :print_bitmap }.freeze
 
   attr_reader :bitmap
@@ -36,5 +37,15 @@ class BitmapEditor
 
   def print_bitmap(_args = nil)
     puts 'There is no image'
+  end
+
+  def color_pixel(args)
+    x = args[0]&.to_i || raise(BadArgumentsError)
+    y = args[1]&.to_i || raise(BadArgumentsError)
+    color = args[2] || raise(BadArgumentsError)
+
+    bitmap.draw_point(x, y, color)
+  rescue ArgumentError
+    raise BadArgumentsError
   end
 end
