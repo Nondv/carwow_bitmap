@@ -21,6 +21,13 @@ class BitmapEditor
     raise UnknownCommandError unless command
     args = parts[1..-1]
     send(command, args)
+
+  # TODO: better to create error type like Bitmap::ArgumentFormatError
+  #       because this way we may supress stupid source code errors.
+  #       For example, we can forget to add parameter to new command
+  #       and call itself will raise ArgumentError
+  rescue ArgumentError
+    raise BadArgumentsError
   end
 
   #
@@ -31,8 +38,6 @@ class BitmapEditor
   def init_bitmap(args)
     width, height = parse_parameters(args, :int, :int)
     @bitmap = Bitmap.new(width, height)
-  rescue ArgumentError
-    raise BadArgumentsError
   end
 
   def print_bitmap(_args = nil)
@@ -42,22 +47,16 @@ class BitmapEditor
   def color_pixel(args)
     x, y, color = parse_parameters(args, :int, :int, :color)
     bitmap.draw_point(x, y, color)
-  rescue ArgumentError
-    raise BadArgumentsError
   end
 
   def color_vertical_line(args)
     x, y1, y2, color = parse_parameters(args, :int, :int, :int, :color)
     bitmap.draw_rectangle(x, y1, x, y2, color)
-  rescue ArgumentError
-    raise BadArgumentsError
   end
 
   def color_horizontal_line(args)
     x1, x2, y, color = parse_parameters(args, :int, :int, :int, :color)
     bitmap.draw_rectangle(x1, y, x2, y, color)
-  rescue ArgumentError
-    raise BadArgumentsError
   end
 
   private
