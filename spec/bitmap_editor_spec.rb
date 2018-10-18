@@ -77,5 +77,16 @@ RSpec.describe BitmapEditor do
       expect { editor.execute_command('H B 1 2 3') }.to raise_error(err)
       expect { editor.execute_command('H 1 y 2 B') }.to raise_error(err)
     end
+
+    it 'executes C command as #clear_bitmap' do
+      editor.init_bitmap([10, 10])
+      editor.bitmap.draw_point(1, 2, 'A')
+      editor.bitmap.draw_point(3, 4, 'B')
+      editor.bitmap.draw_point(9, 9, 'C')
+      editor.execute_command 'C'
+      expect(editor.bitmap[1, 2]).to eq 'O'
+      expect(editor.bitmap[3, 4]).to eq 'O'
+      expect(editor.bitmap[9, 9]).to eq 'O'
+    end
   end
 end

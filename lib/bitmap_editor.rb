@@ -10,6 +10,7 @@ class BitmapEditor
                   'L' => :color_pixel,
                   'V' => :color_vertical_line,
                   'H' => :color_horizontal_line,
+                  'C' => :clear_bitmap,
                   'S' => :print_bitmap }.freeze
 
   attr_reader :bitmap
@@ -57,6 +58,10 @@ class BitmapEditor
   def color_horizontal_line(args)
     x1, x2, y, color = parse_parameters(args, :int, :int, :int, :color)
     bitmap.draw_rectangle(x1, y, x2, y, color)
+  end
+
+  def clear_bitmap(_args = nil)
+    bitmap.draw_rectangle(1, 1, bitmap.width, bitmap.height, 'O')
   end
 
   private
