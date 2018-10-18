@@ -7,5 +7,10 @@ abort 'Please provide correct file' if filename.nil? || !File.exist?(filename)
 
 editor = BitmapEditor.new
 File.new(filename).each_line do |line|
-  editor.execute_command(line.chomp)
+  begin
+    line = line.chomp
+    editor.execute_command(line)
+  rescue BitmapEditor::UnknownCommandError
+    puts 'Unrecognized command :('
+  end
 end

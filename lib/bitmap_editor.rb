@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class BitmapEditor
+  class UnknownCommandError < StandardError; end
+
   COMMAND_MAP = { 'S' => :print_bitmap }.freeze
 
   def execute_command(str)
     parts = str.split
     command = COMMAND_MAP[parts[0]]
 
-    return puts('unrecognised command :(') unless command
+    raise UnknownCommandError unless command
     args = parts[1..-1]
     send(command, args)
   end

@@ -9,5 +9,10 @@ RSpec.describe BitmapEditor do
       expect(editor).to receive(:print_bitmap).once
       editor.execute_command('S')
     end
+
+    it 'raises UnknownCommand when command is not recognized' do
+      error = BitmapEditor::UnknownCommandError
+      expect { editor.execute_command 'some command' }.to raise_error(error)
+    end
   end
 end
