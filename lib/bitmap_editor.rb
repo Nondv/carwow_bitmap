@@ -5,6 +5,7 @@ require_relative 'bitmap'
 class BitmapEditor
   class UnknownCommandError < StandardError; end
   class BadArgumentsError < StandardError; end
+  class BitmapNotInitializedError < StandardError; end
 
   COMMAND_MAP = { 'I' => :init_bitmap,
                   'L' => :color_pixel,
@@ -13,7 +14,11 @@ class BitmapEditor
                   'C' => :clear_bitmap,
                   'S' => :print_bitmap }.freeze
 
-  attr_reader :bitmap
+  attr_reader :bitmap, :output
+
+  def initialize(output = $stdout)
+    @output = output
+  end
 
   def execute_command(str)
     parts = str.split
@@ -41,8 +46,14 @@ class BitmapEditor
     @bitmap = Bitmap.new(width, height)
   end
 
+  # TODO: move this to executable?
   def print_bitmap(_args = nil)
-    puts 'There is no image'
+    raise BitmapNotInitializedError unless bitmap
+
+    (1..bitmap.height).each do |y|
+      line = (1..bitmap.width).map { |x| bitmap[x, y] }.join
+      output.puts line
+    end
   end
 
   def color_pixel(args)

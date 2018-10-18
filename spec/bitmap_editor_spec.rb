@@ -2,7 +2,17 @@ require 'spec_helper'
 require 'bitmap_editor'
 
 RSpec.describe BitmapEditor do
-  subject(:editor) { BitmapEditor.new }
+  class TestOutput
+    attr_reader :result
+
+    def puts(*args)
+      @result ||= ''
+      args.each { |a| @result << "#{a}\n" }
+    end
+  end
+
+  subject(:editor) { BitmapEditor.new(output) }
+  let(:output) { TestOutput.new }
 
   describe '#execute_command' do
     it 'executes S command as #print_bitmap' do
@@ -87,6 +97,15 @@ RSpec.describe BitmapEditor do
       expect(editor.bitmap[1, 2]).to eq 'O'
       expect(editor.bitmap[3, 4]).to eq 'O'
       expect(editor.bitmap[9, 9]).to eq 'O'
+    end
+
+    it 'executes S command as #print_bitmap' do
+      editor.init_bitmap([3, 3])
+      editor.bitmap.draw_point(1, 1, 'A')
+      editor.bitmap.draw_point(2, 2, 'B')
+      editor.bitmap.draw_point(3, 3, 'C')
+      editor.execute_command('S')
+      expect(output.result).to eq "AOO\nOBO\nOOC\n"
     end
   end
 end
