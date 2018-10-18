@@ -14,5 +14,23 @@ RSpec.describe BitmapEditor do
       error = BitmapEditor::UnknownCommandError
       expect { editor.execute_command 'some command' }.to raise_error(error)
     end
+
+    it 'executes I command as #init_bitmap' do
+      expect(editor.bitmap).to be nil
+      editor.execute_command('I 3 5')
+      expect(editor.bitmap.width).to eq 3
+      expect(editor.bitmap.height).to eq 5
+      expect(editor.bitmap[1, 1]).to eq 'O'
+
+      editor.execute_command('I 5 3 9')
+      # ignores additional arguments
+      expect(editor.bitmap.width).to eq 5
+      expect(editor.bitmap.height).to eq 3
+
+      err = BitmapEditor::BadArgumentsError
+      expect { editor.execute_command('I x 5') }.to raise_error(err)
+      expect { editor.execute_command('I') }.to raise_error(err)
+      expect { editor.execute_command('I 5') }.to raise_error(err)
+    end
   end
 end
