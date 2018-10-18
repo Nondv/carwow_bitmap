@@ -1,4 +1,11 @@
 #!/usr/bin/env ruby
+
 require './lib/bitmap_editor'
 
-BitmapEditor.new.run ARGV.first
+filename = ARGV.first
+abort 'Please provide correct file' if filename.nil? || !File.exist?(filename)
+
+editor = BitmapEditor.new
+File.new(filename).each_line do |line|
+  editor.execute_command(line.chomp)
+end
