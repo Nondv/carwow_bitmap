@@ -43,6 +43,16 @@ RSpec.describe Bitmap do
     end
   end
 
+  describe 'colors' do
+    it 'are represented as capital letters' do
+      subject.draw_point(1, 1, 'A')
+      expect { subject.draw_point(1, 1, 'a') }.to raise_error(Bitmap::InvalidColorError)
+      expect { subject.draw_point(1, 1, 1) }.to raise_error(Bitmap::InvalidColorError)
+      expect { subject.draw_point(1, 1, :A) }.to raise_error(Bitmap::InvalidColorError)
+      expect { subject.draw_point(1, 1, 'AB') }.to raise_error(Bitmap::InvalidColorError)
+    end
+  end
+
   describe '#draw_point' do
     it 'sets color of given point' do
       subject.draw_point(4, 1, 'B')

@@ -5,9 +5,11 @@
 # for mutating it. Boundaries are NOT mutable
 #
 class Bitmap
+  class InvalidColorError < StandardError; end
+
   attr_reader :width, :height
 
-  def initialize(width, height, init_color = 'O')
+  def initialize(width, height, init_color = convert_color('O'))
     validate_width_and_height(width, height)
 
     @width = width
@@ -23,7 +25,7 @@ class Bitmap
   end
 
   def draw_point(x, y, color)
-    @data[coordinates_to_index(x, y)] = color
+    @data[coordinates_to_index(x, y)] = convert_color(color)
   end
 
   def draw_rectangle(x1, y1, x2, y2, color)
@@ -40,6 +42,14 @@ class Bitmap
   end
 
   private
+
+  # Right now it just validates input.
+  # Later it should be used for data conversion.
+  # I guess it's better to use symbols for storing colors
+  def convert_color(color)
+    raise InvalidColorError unless color.is_a?(String) && color =~ /^[A-Z]$/
+    color
+  end
 
   # Never convert manually, always use this method
   # or you risk getting math errors

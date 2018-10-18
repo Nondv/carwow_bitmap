@@ -32,7 +32,7 @@ class BitmapEditor
   #       because this way we may supress stupid source code errors.
   #       For example, we can forget to add parameter to new command
   #       and call itself will raise ArgumentError
-  rescue ArgumentError
+  rescue ArgumentError, Bitmap::InvalidColorError
     raise BadArgumentsError
   end
 
@@ -91,7 +91,7 @@ class BitmapEditor
 
       result[i] = case t
                   when :int then int_parameter(arg)
-                  when :color then color_parameter(arg)
+                  when :color then arg
                   end
     end
     result
@@ -100,9 +100,5 @@ class BitmapEditor
   def int_parameter(arg)
     raise BadArgumentsError unless arg.is_a?(Integer) || arg =~ /^\d+$/
     arg.to_i
-  end
-
-  def color_parameter(arg)
-    arg.size == 1 ? arg : raise(BadArgumentsError)
   end
 end
