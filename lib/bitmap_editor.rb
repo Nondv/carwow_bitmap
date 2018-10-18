@@ -29,9 +29,7 @@ class BitmapEditor
   #
 
   def init_bitmap(args)
-    width = args[0]&.to_i || raise(BadArgumentsError)
-    height = args[1]&.to_i || raise(BadArgumentsError)
-
+    width, height = parse_parameters(args, :int, :int)
     @bitmap = Bitmap.new(width, height)
   rescue ArgumentError
     raise BadArgumentsError
@@ -42,34 +40,54 @@ class BitmapEditor
   end
 
   def color_pixel(args)
-    x = args[0]&.to_i || raise(BadArgumentsError)
-    y = args[1]&.to_i || raise(BadArgumentsError)
-    color = args[2] || raise(BadArgumentsError)
-
+    x, y, color = parse_parameters(args, :int, :int, :color)
     bitmap.draw_point(x, y, color)
   rescue ArgumentError
     raise BadArgumentsError
   end
 
   def color_vertical_line(args)
-    x = args[0]&.to_i || raise(BadArgumentsError)
-    y1 = args[1]&.to_i || raise(BadArgumentsError)
-    y2 = args[2]&.to_i || raise(BadArgumentsError)
-    color = args[3] || raise(BadArgumentsError)
-
+    x, y1, y2, color = parse_parameters(args, :int, :int, :int, :color)
     bitmap.draw_rectangle(x, y1, x, y2, color)
   rescue ArgumentError
     raise BadArgumentsError
   end
 
   def color_horizontal_line(args)
-    x1 = args[0]&.to_i || raise(BadArgumentsError)
-    x2 = args[1]&.to_i || raise(BadArgumentsError)
-    y = args[2]&.to_i || raise(BadArgumentsError)
-    color = args[3] || raise(BadArgumentsError)
-
+    x1, x2, y, color = parse_parameters(args, :int, :int, :int, :color)
     bitmap.draw_rectangle(x1, y, x2, y, color)
   rescue ArgumentError
     raise BadArgumentsError
+  end
+
+  private
+
+  # by given types returns corresponding values
+  # with conversion and validation (raises BadArgumentsError)
+  # Available types are:
+  # * :int
+  # * :color
+  #
+  # @example parse_parameters(['1', '15', 'C'], :int, :int, :color
+  def parse_parameters(arguments, *types)
+    result = Array.new(types.size)
+    types.each_with_index do |t, i|
+      arg = arguments[i] || raise(BadArgumentsError)
+
+      result[i] = case t
+                  when :int then int_parameter(arg)
+                  when :color then color_parameter(arg)
+                  end
+    end
+    result
+  end
+
+  def int_parameter(arg)
+    raise BadArgumentsError unless arg.is_a?(Integer) || arg =~ /^\d+$/
+    arg.to_i
+  end
+
+  def color_parameter(arg)
+    arg.size == 1 ? arg : raise(BadArgumentsError)
   end
 end
