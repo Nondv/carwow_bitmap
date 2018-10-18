@@ -8,6 +8,8 @@ class Bitmap
   attr_reader :width, :height
 
   def initialize(width, height, init_color = 'O')
+    validate_width_and_height(width, height)
+
     @width = width
     @height = height
 
@@ -29,5 +31,14 @@ class Bitmap
     raise ArgumentError if x > width || y > height
     # minus one since we start coordinates from (1; 1)
     (y - 1) * width + (x - 1)
+  end
+
+  private
+
+  def validate_width_and_height(width, height)
+    [width, height].each do |n|
+      raise ArgumentError unless n.is_a?(Integer) &&
+                                 (1..250).cover?(n)
+    end
   end
 end

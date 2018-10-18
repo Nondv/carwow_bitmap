@@ -28,4 +28,18 @@ RSpec.describe Bitmap do
       expect(subject[5, 3]).to eq 'O'
     end
   end
+
+  describe 'size limits' do
+    it 'requires width and height to be integer' do
+      expect { Bitmap.new(1.1, 3) }.to raise_error(ArgumentError)
+      expect { Bitmap.new(1, '3') }.to raise_error(ArgumentError)
+    end
+
+    it 'allows sizes in range 1..250' do
+      Bitmap.new(250, 250)
+      expect { Bitmap.new(251, 250) }.to raise_error(ArgumentError)
+      expect { Bitmap.new(0, 250) }.to raise_error(ArgumentError)
+      expect { Bitmap.new(3, 0) }.to raise_error(ArgumentError)
+    end
+  end
 end
