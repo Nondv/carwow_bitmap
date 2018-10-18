@@ -15,4 +15,8 @@ RSpec.describe 'CLI' do
   it 'passes test 2 (with some wrong input, which is supposed to be alerted)' do
     execute_test(2)
   end
+
+  it 'passes test 3 (blank lines, that should be ignored)' do
+    execute_test(3)
+  end
 end

@@ -13,8 +13,8 @@ editor = BitmapEditor.new
 line_number = 1
 File.new(filename).each_line do |line|
   begin
-    line = line.chomp
-    editor.execute_command(line)
+    line = line.chomp.strip
+    editor.execute_command(line) unless line.empty?
   rescue BitmapEditor::UnknownCommandError
     puts error_msg('Unrecognized command', line_number)
   rescue BitmapEditor::BitmapNotInitializedError
