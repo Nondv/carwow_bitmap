@@ -26,6 +26,19 @@ class Bitmap
     @data[coordinates_to_index(x, y)] = color
   end
 
+  def draw_rectangle(x1, y1, x2, y2, color)
+    # convert points to more comfortable format
+    # (take top-left and bottom-right)
+    x1, x2 = x2, x1 if x1 > x2
+    y1, y2 = y2, y1 if y1 > y2
+
+    (x1..x2).each do |x|
+      (y1..y2).each do |y|
+        draw_point(x, y, color)
+      end
+    end
+  end
+
   private
 
   # Never convert manually, always use this method
