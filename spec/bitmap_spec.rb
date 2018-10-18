@@ -42,4 +42,14 @@ RSpec.describe Bitmap do
       expect { Bitmap.new(3, 0) }.to raise_error(ArgumentError)
     end
   end
+
+  describe '#draw_point' do
+    it 'sets color of given point' do
+      subject.draw_point(4, 1, 'B')
+      subject.draw_point(5, 3, 'C')
+      expect(subject[4, 1]).to eq 'B'
+      expect(subject[5, 3]).to eq 'C'
+      expect(subject[4, 3]).to eq 'O'
+    end
+  end
 end

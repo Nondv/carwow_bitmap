@@ -22,6 +22,10 @@ class Bitmap
     @data[coordinates_to_index(x, y)]
   end
 
+  def draw_point(x, y, color)
+    @data[coordinates_to_index(x, y)] = color
+  end
+
   private
 
   # Never convert manually, always use this method
