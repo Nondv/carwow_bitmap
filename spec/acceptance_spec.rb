@@ -19,4 +19,8 @@ RSpec.describe 'CLI' do
   it 'passes test 3 (blank lines, that should be ignored)' do
     execute_test(3)
   end
+
+  it 'passes test 4 (fill command cases)' do
+    execute_test(4)
+  end
 end

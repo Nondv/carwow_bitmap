@@ -1,0 +1,28 @@
+I 7 7
+
+# Draw a cross
+V 4 1 7 A
+H 1 7 4 A
+
+# Fill region 1
+F 2 2 B
+
+# Fill the cross itself
+F 4 2 C
+
+# Color pixels common-sided to center in region 2
+L 6 1 D
+L 6 3 D
+L 5 2 D
+L 7 2 D
+
+# Fill region 2. It should fill only one pixel
+F 6 2 E
+
+# Color center pixel in region 3
+L 2 6 F
+
+# Fill region 3. It should draw a border around center
+F 1 5 G
+
+S

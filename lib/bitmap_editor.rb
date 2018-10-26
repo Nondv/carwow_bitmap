@@ -12,6 +12,7 @@ class BitmapEditor
                   'V' => :color_vertical_line,
                   'H' => :color_horizontal_line,
                   'C' => :clear_bitmap,
+                  'F' => :fill_region,
                   'S' => :print_bitmap }.freeze
 
   attr_reader :bitmap, :output
@@ -73,6 +74,11 @@ class BitmapEditor
 
   def clear_bitmap(_args = nil)
     bitmap.draw_rectangle(1, 1, bitmap.width, bitmap.height, 'O')
+  end
+
+  def fill_region(args)
+    x, y, color = parse_parameters(args, :int, :int, :color)
+    bitmap.fill(x, y, color)
   end
 
   private
