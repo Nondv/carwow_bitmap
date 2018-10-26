@@ -10,11 +10,14 @@ def error_msg(msg, line_number)
 end
 
 editor = BitmapEditor.new
-line_number = 1
+line_number = 0
 File.new(filename).each_line do |line|
+  line_number += 1
+
   begin
     line = line.chomp.strip
-    editor.execute_command(line) unless line.empty?
+    next if line.empty? || line.start_with?('#')
+    editor.execute_command(line)
   rescue BitmapEditor::UnknownCommandError
     puts error_msg('Unrecognized command', line_number)
   rescue BitmapEditor::BitmapNotInitializedError
@@ -22,6 +25,4 @@ File.new(filename).each_line do |line|
   rescue BitmapEditor::BadArgumentsError
     puts error_msg('Invalid command arguments', line_number)
   end
-
-  line_number += 1
 end
