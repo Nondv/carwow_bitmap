@@ -41,6 +41,13 @@ class Bitmap
     end
   end
 
+  def to_a
+    Array.new(height) do |i|
+      y = i + 1
+      Array.new(width) { |j| self[j + 1, y] }
+    end
+  end
+
   private
 
   # Right now it just validates input.

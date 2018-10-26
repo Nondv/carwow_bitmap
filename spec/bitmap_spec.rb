@@ -106,4 +106,14 @@ RSpec.describe Bitmap do
       end
     end
   end
+
+  describe '#to_a' do
+    it 'returns 2D array' do
+      subject.draw_point(2, 2, 'B')
+      expectation = [%w[O O O O O],
+                     %w[O B O O O],
+                     %w[O O O O O]]
+      expect(subject.to_a).to eq(expectation)
+    end
+  end
 end
