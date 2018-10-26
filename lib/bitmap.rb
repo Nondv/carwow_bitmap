@@ -41,6 +41,15 @@ class Bitmap
     end
   end
 
+  def fill(x, y, color)
+    old_color = self[x, y]
+    draw_point(x, y, color)
+    fill(x - 1, y, color) if x > 1 && self[x - 1, y] == old_color
+    fill(x + 1, y, color) if x < width && self[x + 1, y] == old_color
+    fill(x, y - 1, color) if y > 1 && self[x, y - 1] == old_color
+    fill(x, y + 1, color) if y < height && self[x, y + 1] == old_color
+  end
+
   def to_a
     Array.new(height) do |i|
       y = i + 1

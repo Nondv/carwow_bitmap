@@ -116,4 +116,51 @@ RSpec.describe Bitmap do
       expect(subject.to_a).to eq(expectation)
     end
   end
+
+  describe '#fill' do
+    let(:width) { 3 }
+    let(:height) { 3 }
+
+    it 'fills region point belongs to' do
+      subject.fill(1, 1, 'A')
+      expect(subject.to_a).to eq [%w[A A A],
+                                  %w[A A A],
+                                  %w[A A A]]
+    end
+
+    it 'region does not include pixels that dont have a common side with region' do
+      subject.draw_point(2, 1, 'A')
+      subject.draw_point(2, 3, 'A')
+      subject.draw_point(1, 2, 'A')
+      subject.draw_point(3, 2, 'A')
+      subject.fill(2, 2, 'B')
+      expect(subject.to_a).to eq [%w[O A O],
+                                  %w[A B A],
+                                  %w[O A O]]
+    end
+
+    it 'region extends while pixels have a common side with ones within it' do
+      subject.draw_point(1, 1, 'A')
+      subject.draw_point(2, 1, 'A')
+      subject.draw_point(3, 1, 'A')
+      subject.draw_point(3, 2, 'A')
+      subject.draw_point(3, 3, 'A')
+      subject.draw_point(2, 3, 'A')
+      subject.fill(1, 1, 'B')
+      subject.fill(2, 2, 'C')
+      expect(subject.to_a).to eq [%w[B B B],
+                                  %w[C C B],
+                                  %w[C B B]]
+    end
+
+    it 'does not extend region with pixels of specified color' do
+      subject.draw_point(1, 2, 'A')
+      subject.draw_point(2, 2, 'A')
+      subject.draw_point(3, 2, 'A')
+      subject.fill(2, 3, 'A')
+      expect(subject.to_a).to eq [%w[O O O],
+                                  %w[A A A],
+                                  %w[A A A]]
+    end
+  end
 end
