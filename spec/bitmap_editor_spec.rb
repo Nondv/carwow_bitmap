@@ -14,6 +14,7 @@ RSpec.describe BitmapEditor do
   subject(:editor) { BitmapEditor.new(output) }
   let(:output) { TestOutput.new }
 
+  # DEPRECATED: Use acceptance tests
   describe '#execute_command' do
     it 'executes S command as #print_bitmap' do
       expect(editor).to receive(:print_bitmap).once
